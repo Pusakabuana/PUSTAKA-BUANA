@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font default */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Style global untuk link */
+a {
+  @apply text-green-800 hover:underline;
+}
