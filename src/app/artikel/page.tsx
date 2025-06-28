@@ -1,34 +1,34 @@
-import { fetchArtikelById } from '@/lib/artikel';
-import { getBaseUrl } from '@/lib/getBaseUrl';
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
+import { fetchArtikelById } from "@/lib/artikel";
+import Image from "next/image";
+import { notFound } from "next/navigation";
 
-interface PageProps {
+interface ArtikelPageProps {
   params: {
     id: string;
   };
 }
 
-export async function generateMetadata({ params }: PageProps) {
+// (Opsional, untuk SEO)
+export async function generateMetadata({ params }: ArtikelPageProps) {
   const artikel = await fetchArtikelById(params.id);
-  if (!artikel) return { title: 'Artikel Tidak Ditemukan' };
+  if (!artikel) return { title: "Artikel Tidak Ditemukan" };
 
   return {
-    title: artikel.title + ' | Pustaka Buana',
-    description: artikel.content?.slice(0, 150) || '',
+    title: artikel.title + " | Pustaka Buana",
+    description: artikel.content.slice(0, 150),
   };
 }
 
-export default async function ArtikelDetailPage({ params }: PageProps) {
+export default async function ArtikelDetailPage({ params }: ArtikelPageProps) {
   const artikel = await fetchArtikelById(params.id);
-  if (!artikel) return notFound();
+
+  if (!artikel) {
+    notFound();
+  }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-2">{artikel.title}</h1>
-      <p className="text-sm text-gray-500 mb-4">
-        {artikel.kategori} | {new Date(artikel.createdAt).toLocaleDateString()}
-      </p>
+    <main className="px-4 max-w-4xl mx-auto mt-10">
+      <h1 className="text-2xl md:text-4xl font-bold text-green-900 mb-4">{artikel.title}</h1>
 
       {artikel.imageUrl && (
         <Image
@@ -36,7 +36,7 @@ export default async function ArtikelDetailPage({ params }: PageProps) {
           alt={artikel.title}
           width={800}
           height={400}
-          className="rounded-lg my-6 w-full object-cover max-h-[400px]"
+          className="rounded-lg my-6 max-h-[400px] w-full object-cover"
         />
       )}
 
@@ -44,6 +44,12 @@ export default async function ArtikelDetailPage({ params }: PageProps) {
         className="prose max-w-none text-justify"
         dangerouslySetInnerHTML={{ __html: artikel.content }}
       />
-    </div>
+
+      {artikel.kategori && (
+        <p className="mt-6 text-sm text-gray-500">
+          Kategori: <strong>{artikel.kategori}</strong>
+        </p>
+      )}
+    </main>
   );
 }
