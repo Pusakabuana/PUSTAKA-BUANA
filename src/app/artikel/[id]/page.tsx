@@ -2,7 +2,11 @@ import { fetchArtikelById } from "@/lib/artikel";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}) {
   const artikel = await fetchArtikelById(params.id);
   if (!artikel) return { title: "Artikel Tidak Ditemukan" };
 
