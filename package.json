@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@netlify/next": "^1.4.9",
     "cloudinary": "^2.7.0",
     "date-fns": "^4.1.0",
     "formidable": "^3.5.4",
