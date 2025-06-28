@@ -8,8 +8,8 @@ interface ArtikelPageProps {
   };
 }
 
-// (Opsional, untuk SEO)
-export async function generateMetadata({ params }: ArtikelPageProps) {
+// SEO metadata
+export async function generateMetadata({ params }: { params: { id: string } }) {
   const artikel = await fetchArtikelById(params.id);
   if (!artikel) return { title: "Artikel Tidak Ditemukan" };
 
@@ -19,16 +19,15 @@ export async function generateMetadata({ params }: ArtikelPageProps) {
   };
 }
 
-export default async function ArtikelDetailPage({ params }: ArtikelPageProps) {
+export default async function ArtikelDetailPage({ params }: { params: { id: string } }) {
   const artikel = await fetchArtikelById(params.id);
-
-  if (!artikel) {
-    notFound();
-  }
+  if (!artikel) notFound();
 
   return (
     <main className="px-4 max-w-4xl mx-auto mt-10">
-      <h1 className="text-2xl md:text-4xl font-bold text-green-900 mb-4">{artikel.title}</h1>
+      <h1 className="text-2xl md:text-4xl font-bold text-green-900 mb-4">
+        {artikel.title}
+      </h1>
 
       {artikel.imageUrl && (
         <Image
