@@ -1,9 +1,16 @@
-import { fetchArtikelById } from "@/lib/artikel";
+import { fetchArtikelById, fetchArtikelList } from "@/lib/artikel";
 
-interface PageProps {
+type PageProps = {
   params: {
     id: string;
   };
+};
+
+export async function generateStaticParams() {
+  const artikelList = await fetchArtikelList(1, 100); // ambil banyak untuk pre-render
+  return artikelList.map((artikel) => ({
+    id: artikel._id,
+  }));
 }
 
 export default async function ArtikelDetailPage({ params }: PageProps) {
