@@ -1,14 +1,13 @@
 import { notFound } from 'next/navigation';
 import { fetchArtikelById } from '@/lib/artikel';
-import Image from 'next/image';
 
-interface ArtikelPageProps {
+interface ArtikelDetailPageProps {
   params: {
     id: string;
   };
 }
 
-export default async function ArtikelDetailPage({ params }: ArtikelPageProps) {
+export default async function ArtikelDetailPage({ params }: ArtikelDetailPageProps) {
   const artikel = await fetchArtikelById(params.id);
 
   if (!artikel) {
@@ -21,27 +20,24 @@ export default async function ArtikelDetailPage({ params }: ArtikelPageProps) {
         {artikel.title}
       </h1>
 
-      {artikel.imageUrl && (
-        <div className="relative w-full h-64 mb-6 rounded overflow-hidden">
-          <Image
-            src={artikel.imageUrl}
-            alt={artikel.title}
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
-      )}
-
-      <article className="prose prose-green max-w-none">
-        <div dangerouslySetInnerHTML={{ __html: artikel.content }} />
-      </article>
-
       {artikel.kategori && (
-        <p className="mt-6 text-sm text-gray-500">
+        <p className="mt-2 text-sm text-gray-500">
           Kategori: <strong>{artikel.kategori}</strong>
         </p>
       )}
+
+      {artikel.imageUrl && (
+        <img
+          src={artikel.imageUrl}
+          alt={artikel.title}
+          className="rounded-lg my-6 max-h-[400px] w-full object-cover"
+        />
+      )}
+
+      <div
+        className="prose max-w-none text-justify"
+        dangerouslySetInnerHTML={{ __html: artikel.content }}
+      />
     </main>
   );
 }
