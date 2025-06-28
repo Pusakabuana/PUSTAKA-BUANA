@@ -2,11 +2,13 @@ import { fetchArtikelById } from "@/lib/artikel";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { id: string };
-}) {
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+export async function generateMetadata({ params }: PageProps) {
   const artikel = await fetchArtikelById(params.id);
   if (!artikel) return { title: "Artikel Tidak Ditemukan" };
 
@@ -16,11 +18,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ArtikelDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function ArtikelDetailPage({ params }: PageProps) {
   const artikel = await fetchArtikelById(params.id);
 
   if (!artikel) {
