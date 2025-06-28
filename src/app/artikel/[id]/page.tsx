@@ -25,7 +25,9 @@ export default async function ArtikelDetailPage({
 
   return (
     <main className="px-4 max-w-4xl mx-auto mt-10">
-      <h1 className="text-2xl md:text-4xl font-bold text-green-900 mb-4">{artikel.title}</h1>
+      <h1 className="text-2xl md:text-4xl font-bold text-green-900 mb-4">
+        {artikel.title}
+      </h1>
 
       {artikel.imageUrl && (
         <Image
