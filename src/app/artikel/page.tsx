@@ -5,11 +5,19 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { fetchArtikelList, ARTIKEL_PER_PAGE } from '@/lib/artikel';
 
+type Artikel = {
+  _id: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  category?: string;
+};
+
 export default function ArtikelPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [artikelList, setArtikelList] = useState<any[]>([]);
+  const [artikelList, setArtikelList] = useState<Artikel[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -55,14 +63,13 @@ export default function ArtikelPage() {
             const newCategory = e.target.value;
             const params = new URLSearchParams(window.location.search);
 
-
             if (newCategory) {
               params.set('category', newCategory);
             } else {
               params.delete('category');
             }
 
-            params.set('page', '1'); // reset ke halaman 1 jika filter berubah
+            params.set('page', '1'); // Reset ke halaman 1 saat filter berubah
             router.push(`/artikel?${params.toString()}`);
           }}
           className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
@@ -74,6 +81,7 @@ export default function ArtikelPage() {
         </select>
       </form>
 
+      {/* Daftar Artikel */}
       {loading ? (
         <p className="text-center text-gray-500">Memuat artikel...</p>
       ) : artikelList.length === 0 ? (
@@ -130,9 +138,7 @@ export default function ArtikelPage() {
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <Link
               key={page}
-              href={`/artikel?page=${page}${qParam ? `&q=${qParam}` : ''}${
-                categoryParam ? `&category=${categoryParam}` : ''
-              }`}
+              href={`/artikel?page=${page}${qParam ? `&q=${qParam}` : ''}${categoryParam ? `&category=${categoryParam}` : ''}`}
               className={`px-4 py-2 rounded-md border text-sm ${
                 page === currentPage
                   ? 'bg-green-700 text-white'
