@@ -1,36 +1,42 @@
-import { notFound } from 'next/navigation';
 import { fetchArtikelById } from '@/lib/artikel';
+import { getBaseUrl } from '@/lib/getBaseUrl';
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
 
-interface ArtikelDetailPageProps {
+interface PageProps {
   params: {
     id: string;
   };
 }
 
-export default async function ArtikelDetailPage({ params }: ArtikelDetailPageProps) {
+export async function generateMetadata({ params }: PageProps) {
   const artikel = await fetchArtikelById(params.id);
+  if (!artikel) return { title: 'Artikel Tidak Ditemukan' };
 
-  if (!artikel) {
-    notFound();
-  }
+  return {
+    title: artikel.title + ' | Pustaka Buana',
+    description: artikel.content?.slice(0, 150) || '',
+  };
+}
+
+export default async function ArtikelDetailPage({ params }: PageProps) {
+  const artikel = await fetchArtikelById(params.id);
+  if (!artikel) return notFound();
 
   return (
-    <main className="max-w-3xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold text-green-800 mb-4">
-        {artikel.title}
-      </h1>
-
-      {artikel.kategori && (
-        <p className="mt-2 text-sm text-gray-500">
-          Kategori: <strong>{artikel.kategori}</strong>
-        </p>
-      )}
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-2">{artikel.title}</h1>
+      <p className="text-sm text-gray-500 mb-4">
+        {artikel.kategori} | {new Date(artikel.createdAt).toLocaleDateString()}
+      </p>
 
       {artikel.imageUrl && (
-        <img
+        <Image
           src={artikel.imageUrl}
           alt={artikel.title}
-          className="rounded-lg my-6 max-h-[400px] w-full object-cover"
+          width={800}
+          height={400}
+          className="rounded-lg my-6 w-full object-cover max-h-[400px]"
         />
       )}
 
@@ -38,6 +44,6 @@ export default async function ArtikelDetailPage({ params }: ArtikelDetailPagePro
         className="prose max-w-none text-justify"
         dangerouslySetInnerHTML={{ __html: artikel.content }}
       />
-    </main>
+    </div>
   );
 }
