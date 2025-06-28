@@ -1,7 +1,7 @@
 const nextConfig = {
   reactStrictMode: true,
   eslint: {
-    ignoreDuringBuilds: true, // ✅ Abaikan error ESLint saat build di Vercel
+    ignoreDuringBuilds: true, // ⛔ Abaikan semua error eslint saat build di Vercel
   },
 };
 
