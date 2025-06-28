@@ -1,12 +1,12 @@
 import { fetchArtikelById } from "@/lib/artikel";
 
-type Params = {
+interface PageProps {
   params: {
     id: string;
   };
-};
+}
 
-export default async function ArtikelDetailPage({ params }: Params) {
+export default async function ArtikelDetailPage({ params }: PageProps) {
   const artikel = await fetchArtikelById(params.id);
 
   return (
